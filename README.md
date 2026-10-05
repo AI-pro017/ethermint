@@ -3,76 +3,53 @@ parent:
   order: false
 -->
 
-<div align="center">
-  <h1> Ethermint </h1>
-</div>
+# Ethermint
 
-![banner](docs/ethermint.jpg)
+A copy of [Ethermint](https://github.com/evmos/ethermint) v0.21, the library that adds a full Ethereum Virtual Machine to Cosmos SDK chains. It's what Evmos, and through it Cascadia, use to run Solidity contracts and speak the Ethereum JSON-RPC.
 
-<div align="center">
-  <a href="https://github.com/evmos/ethermint/releases/latest">
-    <img alt="Version" src="https://img.shields.io/github/tag/tharsis/ethermint.svg" />
-  </a>
-  <a href="https://github.com/evmos/ethermint/blob/main/LICENSE">
-    <img alt="License: Apache-2.0" src="https://img.shields.io/github/license/tharsis/ethermint.svg" />
-  </a>
-  <a href="https://pkg.go.dev/github.com/evmos/ethermint">
-    <img alt="GoDoc" src="https://godoc.org/github.com/evmos/ethermint?status.svg" />
-  </a>
-  <a href="https://goreportcard.com/report/github.com/evmos/ethermint">
-    <img alt="Go report card" src="https://goreportcard.com/badge/github.com/evmos/ethermint"/>
-  </a>
-  <a href="https://bestpractices.coreinfrastructure.org/projects/5018">
-    <img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/tharsis/ethermint">
-  </a>
-</div>
-<div align="center">
-  <a href="https://discord.gg/trje9XuAmy">
-    <img alt="Discord" src="https://img.shields.io/discord/809048090249134080.svg" />
-  </a>
-  <a href="https://github.com/evmos/ethermint/actions?query=branch%3Amain+workflow%3ALint">
-    <img alt="Lint Status" src="https://github.com/evmos/ethermint/actions/workflows/lint.yml/badge.svg?branch=main" />
-  </a>
-  <a href="https://codecov.io/gh/tharsis/ethermint">
-    <img alt="Code Coverage" src="https://codecov.io/gh/tharsis/ethermint/branch/main/graph/badge.svg" />
-  </a>
-</div>
+With Ethermint a Cosmos chain can run unmodified Ethereum smart contracts, use Ethereum style accounts and keys, and work with tools like MetaMask, Hardhat and ethers, while keeping Tendermint's fast finality and IBC.
 
-Ethermint is a scalable and interoperable Ethereum library, built on Proof-of-Stake with fast-finality using the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk/) which runs on top of [Tendermint Core](https://github.com/tendermint/tendermint) consensus engine.
+## What's inside
 
-**Note**: Requires [Go 1.19+](https://golang.org/dl/)
+- `x/evm`: the EVM module, which executes transactions and stores contract state
+- `x/feemarket`: EIP-1559 style base fees
+- `rpc/`: the Ethereum JSON-RPC server (`eth_`, `net_`, `web3_`, `debug_` and more)
+- `crypto/`: `eth_secp256k1` keys and Ethereum compatible signing
+- `indexer/`: a transaction indexer for fast lookups by Ethereum hash
+- `cmd/ethermintd`: a sample chain that wires it all together
 
-## Installation
+## Requirements
 
-For prerequisites and detailed build instructions please read the Evmos [Installation](https://docs.evmos.org/validators/quickstart/installation.html) instructions. Once the dependencies are installed, run:
+- Go 1.19 or newer
+- make and git
+- jq, for the local node script
+
+## Building
 
 ```bash
+git clone https://github.com/AI-pro017/ethermint.git
+cd ethermint
 make install
 ```
 
-Or check out the latest [release](https://github.com/evmos/ethermint/releases).
+This installs the `ethermintd` binary.
 
-## Quick Start
+## Running a local node
 
-To learn how Ethermint works from a high-level perspective, go to the [Introduction](https://docs.evmos.org/about/intro/overview.html) section from the documentation. You can also check the instructions to [Run a Node](https://docs.evmos.org/validators/quickstart/run_node.html).
+```bash
+./init.sh
+```
 
-For an example on how Ethermint can be used on any Cosmos-SDK chain, please refer to [Evmos](https://www.github.com/tharsis/evmos).
+It creates a single validator chain with the ID `ethermint_9000-1`, funds a test key and starts it with the JSON-RPC enabled on `http://localhost:8545`, so you can connect MetaMask or deploy contracts with Hardhat. On Windows use `init.bat`.
 
-## Community
+## Tests
 
-The following chat channels and forums are a great spot to ask questions about Ethermint:
+```bash
+make test-unit
+```
 
-- [Evmos Twitter](https://twitter.com/EvmosOrg)
-- [Evmos Discord](https://discord.gg/trje9XuAmy)
-- [Evmos Telegram](https://t.me/EvmosOrg)
-- [Tharsis Twitter](https://twitter.com/TharsisHQ)
+The integration tests under `tests/` use Nix to bring up full nodes.
 
-## Contributing
+## License
 
-Looking for a good place to start contributing? Check out some [`good first issues`](https://github.com/evmos/ethermint/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
-
-For additional instructions, standards and style guides, please refer to the [Contributing](./CONTRIBUTING.md) document.
-
-## Careers
-
-See our open positions on [Greenhouse](https://boards.eu.greenhouse.io/evmos).
+LGPL-3.0, same as the original project by Tharsis and the Evmos team. See [LICENSE](LICENSE).
